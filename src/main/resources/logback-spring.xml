@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration>
+
+<configuration scan="true" scanPeriod="60 seconds">
+
+  <springProperty scope="context" name="LOG_LEVEL" source="spring.logging.level.root" />
+  <springProperty name="SERVICE_NAME" source="spring.application.name" />
+
+  <property name="LOG_ENCODER_PATTERN"
+    value="%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%5p) %yellow([%+10thread]) %cyan(%c:%line) : %msg%n" />
+
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>${LOG_ENCODER_PATTERN}</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>logs/${SERVICE_NAME}.log</file>
+
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <!-- rollover daily -->
+      <fileNamePattern>logs/${SERVICE_NAME}-%d{yyyy-MM-dd}.%i</fileNamePattern>
+      <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+        <maxFileSize>30MB</maxFileSize>
+      </timeBasedFileNamingAndTriggeringPolicy>
+      <maxHistory>5</maxHistory>
+      <cleanHistoryOnStart>false</cleanHistoryOnStart>
+    </rollingPolicy>
+    <encoder>
+      <pattern>${LOG_ENCODER_PATTERN}</pattern>
+    </encoder>
+  </appender>
+
+  <!-- 커스텀 파일용-->
+  <appender name="CUSTOM_ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>logs/${SERVICE_NAME}-custom.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <!-- rollover daily -->
+      <fileNamePattern>logs/${SERVICE_NAME}-custom-%d{yyyy-MM-dd}.%i</fileNamePattern>
+      <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+        <!-- assumption 5 services running on a single host
+            - cap the log generation to 1.5GB / server and 300MB / service -->
+        <maxFileSize>30MB</maxFileSize>
+      </timeBasedFileNamingAndTriggeringPolicy>
+      <!--<maxHistory>30</maxHistory>-->
+      <!-- Application 기동 시 기존 아카이브 파일 삭제 -->
+      <cleanHistoryOnStart>false</cleanHistoryOnStart>
+    </rollingPolicy>
+    <encoder>
+      <pattern>${LOG_ENCODER_PATTERN}</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="ASYNC_ROLLING" class="ch.qos.logback.classic.AsyncAppender" queueSize="512">
+    <appender-ref ref="ROLLING"/>
+    <appender-ref ref="CUSTOM_ROLLING"/>
+  </appender>
+
+  <logger name="jdbc" level="OFF"/>Ï
+  <logger name="jdbc.sqlonly" level="OFF"/>
+  <logger name="jdbc.sqltiming" level="OFF"/>
+  <logger name="jdbc.audit" level="OFF"/>
+  <logger name="jdbc.resultset" level="OFF"/>
+  <logger name="jdbc.resultsettable" level="OFF"/>
+  <logger name="jdbc.connection" level="OFF"/>
+  <logger name="log4jdbc.log4j2" level="ERROR"/>
+  <logger name="org.apache.http" level="ERROR"/>
+  <logger name="com.zaxxer.hikari.pool" level="ERROR"/>
+  <logger name="org.hibernate" level="INFO"/>
+  <logger name="org.springframework.orm" level="INFO"/>
+  <logger name="org.springframework.jdbc" level="INFO"/>
+  <logger name="org.springframework.data" level="INFO"/>
+  <logger name="org.mybatis.spring.SqlSessionUtils" level="ERROR"/>
+
+  <!-- 커스텀 로거 -->
+  <logger name="CustomLogger" level="INFO">
+    <appender-ref ref="CUSTOM_ROLLING"/>
+  </logger>
+
+  <root level="${LOG_LEVEL}">
+    <appender-ref ref="STDOUT"/>
+    <appender-ref ref="ASYNC_ROLLING"/>
+  </root>
+</configuration>

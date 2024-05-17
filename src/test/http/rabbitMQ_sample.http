@@ -1,0 +1,9 @@
+### POST RabbitMQ Producer 테스트
+POST http://localhost:9080/api/v1/rabbitMQ/producer/sample/queue
+Content-Type: application/json
+
+{
+  "message1" : "RabbitMQ + Springboot",
+  "message2" : "Success!!"
+}
+
