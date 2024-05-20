@@ -4,6 +4,14 @@ Content-Type: application/json
 
 {
   "message1" : "RabbitMQ + Springboot",
-  "message2" : "Success!!"
+  "message2" : "Success"
 }
 
+### POST RabbitMQ Batch 테스트
+POST http://localhost:9080/api/v1/rabbitMQ/producer/sample/batch/queue
+Content-Type: application/json
+
+{
+"message1" : "RabbitMQ + SpringBoot",
+"message2" : "Success"
+}
