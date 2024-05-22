@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class RabbitMQController {
 
-    private final RabbitMQSampleConfig rabbitMQSampleConfig;
     private final RabbitTemplate rabbitTemplate;
     private final GsonUtil gsonUtil;
 
@@ -27,8 +26,8 @@ public class RabbitMQController {
         log.info("producer message : \n{}", gsonUtil.getPrettyGsonStr(message));
 
         rabbitTemplate.convertAndSend(
-            rabbitMQSampleConfig.EXCHANGE_NAME,
-            rabbitMQSampleConfig.ROUTING_KEY,
+            RabbitMQSampleConfig.EXCHANGE_NAME,
+            RabbitMQSampleConfig.ROUTING_KEY,
             message
         );
         log.info("producer sending!");
@@ -43,8 +42,8 @@ public class RabbitMQController {
             message.changeMessage2(rawMessage2 + i);
 
             rabbitTemplate.convertAndSend(
-                rabbitMQSampleConfig.EXCHANGE_NAME,
-                rabbitMQSampleConfig.ROUTING_KEY,
+                RabbitMQSampleConfig.EXCHANGE_NAME,
+                RabbitMQSampleConfig.ROUTING_KEY,
                 message
             );
 

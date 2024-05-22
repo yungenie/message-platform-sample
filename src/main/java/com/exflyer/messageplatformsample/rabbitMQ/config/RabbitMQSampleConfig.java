@@ -14,9 +14,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQSampleConfig {
 
-    public final String EXCHANGE_NAME = "sample.exchange";
-    public final String QUEUE_NAME = "sample.queue";
-    public final String ROUTING_KEY = "sample.schedule.#";
+    public static final String EXCHANGE_NAME = "sample.exchange";
+    public static final String QUEUE_NAME = "sample.queue";
+    public static final String ROUTING_KEY = "sample.schedule.#";
 
     /**
      * 지정된 Exchange 이름으로 Exchange Bean 을 생성

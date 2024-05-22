@@ -28,6 +28,10 @@ spring:
     port: 5672
     username: guest
     password: guest
+    # 수동 ACK , 자동 ACK 모드 활성화 하지 않는다. 목적은 에러 발생후 message 유실 되는걸 방지. 기본 값 : none
+    listener:
+      simple:
+        acknowledge-mode: manual
   # Console 출력시 컬러 출력
   output:
     ansi:
