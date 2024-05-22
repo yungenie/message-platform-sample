@@ -70,8 +70,17 @@ $ docker run -d --name webos-rabbitmq -p 15672:15672 -p 15674:15674 --restart=un
 ---
 # RabbitMQ 관리 콘솔 브라우저 사전작업
 
-- RabbitMQ Management에 가서`Exchange`와 `Queue`, `Routing key`를 생성
+- RabbitMQ Management 페이지에서 `Exchange`와 `Queue`를 생성 후, Exchange 메뉴 > Bindings 에서 To queue 매핑하고, `Routing key`를 생성 후 바인딩 해줍니다.
 
+1.
+<img width="50%" alt="image" src="./img/exchange.png">
+
+
+2. 
+<img width="50%" alt="image" src="./img/queue.png">
+
+3.
+<img width="50%" alt="image" src="./img/binding.png">
 
 ---
 # Spring Boot 설정
