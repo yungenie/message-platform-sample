@@ -154,6 +154,7 @@ https://docs.spring.io/spring-amqp/reference/amqp/receiving-messages/batch.html
 
   - SpringBoot AMQP에서 메시지 publish할 때 Delivery mode는 기본적으로 `Persistent`로 설정되어 있습니다. 이는 메시지가 RabbitMQ 서버의 재시작 후에도 지속되도록 보장합니다.
     - 'RabbitTemplate' 클래스 내부적으로 setMessageConverter() > MessageConverter.java >  toMessage() > MessageProperties 클래스에서 Delivery mod를 Persistent로 설정하는 것을 확인할 수 있습니다.
+  
       <img width="50%" alt="image" src="./img/publish-source-deliverymode.png">
 
 
@@ -167,7 +168,7 @@ https://docs.spring.io/spring-amqp/reference/amqp/receiving-messages/batch.html
   - 메시지 전달 : 메시지가 소비자에게 전달합니다.
   - 메시지 처리/예외 발생 : 소비자가 메시지 처리를 완료하면 'basicAck'를 날려 수동 ACK 처리하고, 소비자가 메시지 처리 중에 예외가 발생하면 소비자는 'basicAck()' 호출하지 않고 'basicNack()' 호출하거나 아무것도 호출하지 않습니다.
   - 결과 : RabbitMQ는 ACK을 받지 못했기 때문에, 해당 메시지를 다시 큐에 넣고 소비자에게 재전송합니다. 
-    - 다시 원래 큐로 돌아가기 때문에 재처리 해야할 메시지와 신규 메시지가 혼합되면서 처리 효율성이 떨어질 수도 있고, 계속 재전송 받는 경우 무한 루프 문제가 발생할 수 있어 디스크 공간을 소모할 수 있습니다. 
+    - 다시 원래 큐로 돌아가기 때문에 재처리 해야할 메시지와 신규 메시지가 혼합되면서 처리 효율성이 떨어질 수도 있으므로, 계속 재전송 받는 경우 무한 루프 문제가 발생할 수 있어 디스크 공간을 소모할 수 있습니다. 
 
 - 정리
   - 자동/수동 ACK 문제 해결의 이상적인 방법은 수동 ACK 설정하고 소비자가 메시지 처리 중 '에러발생' 시 재처리 메시지와 신규 메시지를 분리하여 메시지 처리 효율성을 높힙니다.
